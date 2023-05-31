@@ -4,16 +4,17 @@
   <title>Video Frame Extraction</title>
   <style>
     .image-gallery {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-gap: 10px;
-      max-width: 1000px;
-      margin: 0 auto;
+      display: flex;
+      overflow-x: scroll;
+      max-width: 100%;
+      margin-bottom: 20px;
     }
 
     .image-gallery img {
-      width: 100%;
+      flex: 0 0 auto;
+      width: 200px;
       height: auto;
+      margin-right: 10px;
     }
   </style>
 </head>
