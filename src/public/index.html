@@ -2,22 +2,37 @@
 <html>
 <head>
   <title>Video Frame Extraction</title>
+  <style>
+    .image-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .image-gallery img {
+      width: 100%;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
   <h1>Video Frame Extraction</h1>
   <form id="videoForm" action="/extract-frame" method="post" enctype="multipart/form-data">
     <input type="file" name="video" accept="video/mp4">
-    <button type="submit">Extract Frame</button>
+    <button type="submit">Extract Frames</button>
   </form>
+
   <div id="frameContainer" style="display: none;">
-    <h2>Extracted Frame:</h2>
-    <img id="frameImage" alt="Extracted Frame">
+    <h2>Extracted Frames:</h2>
+    <div class="image-gallery"></div>
   </div>
 
   <script>
     const videoForm = document.getElementById('videoForm');
     const frameContainer = document.getElementById('frameContainer');
-    const frameImage = document.getElementById('frameImage');
+    const imageGallery = document.querySelector('.image-gallery');
 
     videoForm.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -30,12 +45,23 @@
 
       if (response.ok) {
         const data = await response.json();
-        frameImage.src = data.frameUrl;
-        frameContainer.style.display = 'block';
+        displayFrames(data.frameUrls);
       } else {
-        alert('An error occurred while extracting the frame.');
+        alert('An error occurred while extracting the frames.');
       }
     });
+
+    function displayFrames(frameUrls) {
+      imageGallery.innerHTML = '';
+      
+      frameUrls.forEach((frameUrl) => {
+        const img = document.createElement('img');
+        img.src = frameUrl;
+        imageGallery.appendChild(img);
+      });
+
+      frameContainer.style.display = 'block';
+    }
   </script>
 </body>
 </html>
