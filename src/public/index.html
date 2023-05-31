@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Frame Extraction</title>
+</head>
+<body>
+  <h1>Video Frame Extraction</h1>
+  <form id="videoForm" action="/extract-frame" method="post" enctype="multipart/form-data">
+    <input type="file" name="video" accept="video/mp4">
+    <button type="submit">Extract Frame</button>
+  </form>
+  <div id="frameContainer" style="display: none;">
+    <h2>Extracted Frame:</h2>
+    <img id="frameImage" alt="Extracted Frame">
+  </div>
+
+  <script>
+    const videoForm = document.getElementById('videoForm');
+    const frameContainer = document.getElementById('frameContainer');
+    const frameImage = document.getElementById('frameImage');
+
+    videoForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(videoForm);
+      const response = await fetch('/extract-frame', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        frameImage.src = data.frameUrl;
+        frameContainer.style.display = 'block';
+      } else {
+        alert('An error occurred while extracting the frame.');
+      }
+    });
+  </script>
+</body>
+</html>
