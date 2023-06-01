@@ -1,0 +1,17 @@
+.image-gallery {
+    display: flex;
+    overflow-x: scroll;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .image-gallery img {
+    flex: 0 0 auto;
+    width: 200px;
+    height: auto;
+    margin-right: 10px;
+  }  

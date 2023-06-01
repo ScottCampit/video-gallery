@@ -78,13 +78,31 @@ app.post("/extract-frame", upload.single("video"), async (req, res) => {
     ffmpeg.setFfprobePath("/opt/homebrew/bin/ffprobe"); // Update the path to ffprobe executable
 
     const frameUrls = await extractFrames(videoPath, frameTimes);
+    const sortedFrameUrls = sortFrameUrls(frameUrls);
 
-    res.json({ frameUrls });
+    res.json({ frameUrls: sortedFrameUrls });
   } catch (err) {
     console.error("Error extracting frames:", err);
     res.status(500).json({ error: "An error occurred while extracting the frames." });
   }
 });
+
+function sortFrameUrls(frameUrls) {
+  return frameUrls.sort((a, b) => {
+    const frameNumberA = extractFrameNumber(a);
+    const frameNumberB = extractFrameNumber(b);
+    return frameNumberA - frameNumberB;
+  });
+}
+
+function extractFrameNumber(frameUrl) {
+  const regex = /output_(\d+)\.png/;
+  const match = frameUrl.match(regex);
+  if (match && match.length === 2) {
+    return parseInt(match[1], 10);
+  }
+  return -1; // Return -1 if the frame number extraction fails
+}
 
 const port = 3000;
 app.listen(port, () => {
